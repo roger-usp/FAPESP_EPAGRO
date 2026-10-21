@@ -7,11 +7,11 @@ function resetMapContainer(mapContainerID) {
 
     let hoverInfo = document.createElement("div");
     hoverInfo.id = "hover-info";
-    hoverInfo.style = "height: 5%; display: flex;";
+    hoverInfo.style = "height: 5%; display: flex; align-items: center; padding: 0 12px;";
 
     let pointArrowLegend = document.createElement("div");
     pointArrowLegend.id = "point-arrow-legend";
-    pointArrowLegend.style = "height: 5%; display: flex;";
+    pointArrowLegend.style = "height: 5%; display: flex; align-items: center; padding: 0 12px;";
 
     let colorbarDiv = document.createElement("div");
     colorbarDiv.id = "colorbar-div";
