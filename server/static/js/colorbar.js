@@ -1,3 +1,42 @@
+function formatColorbarValue(value) {
+    const units = [
+        {threshold: 1e9, divisor: 1e9, suffix: "B"},
+        {threshold: 1e6, divisor: 1e6, suffix: "M"},
+        {threshold: 1e3, divisor: 1e3, suffix: "k"}
+    ];
+    const absValue = Math.abs(value);
+
+    if (absValue >= 1e12) {
+        return value.toExponential(2);
+    }
+
+    if (absValue < 1e3) {
+        return value.toString();
+    }
+
+    let unitIndex = units.findIndex(unit => absValue >= unit.threshold);
+    let scaledValue;
+    let decimalPlaces;
+
+    while (unitIndex < units.length) {
+        const unit = units[unitIndex];
+        scaledValue = value / unit.divisor;
+        decimalPlaces = Math.max(0, 2 - Math.floor(Math.log10(Math.abs(scaledValue))));
+        scaledValue = Number(scaledValue.toFixed(decimalPlaces));
+
+        if (Math.abs(scaledValue) < 1e3) {
+            return `${scaledValue.toFixed(decimalPlaces)}${unit.suffix}`;
+        }
+
+        if (unitIndex === 0) {
+            return value.toExponential(2);
+        }
+
+        unitIndex--;
+    }
+}
+
+
 function makeColorbar(div_id, title, n_divisions, cmap) {
     // The div provided must have a height and width
     let cbar_container = document.getElementById(div_id);
@@ -42,8 +81,7 @@ function makeColorbar(div_id, title, n_divisions, cmap) {
     for (let i=0; i<n_divisions+1;i++) {
         let percentage = i/n_divisions;
         var val = Math.round(cmap.minVal + percentage*(cmap.maxVal - cmap.minVal));
-        let val_len = val.toString().length;
-        val = val_len <= 6 ? val : val.toExponential(1)
+        val = formatColorbarValue(val);
 
         let legend_entry = document.createElement("div");
         legend_entry.className = "legend_entry000";
