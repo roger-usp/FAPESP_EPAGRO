@@ -98,7 +98,7 @@ function showInfo(e) {
 
 function hideInfo(e){
     let layer = e.target;
-    layer.setStyle({dashArray: '3', color: "#444444", weight: 1})
+    layer.setStyle(stylePolygonFeature(layer.feature));
     let infoDivID = "hover-info"; // declared in resetMapContainer
     let infoDiv = document.getElementById(infoDivID);
     infoDiv.innerHTML = "<p></p>";
@@ -106,11 +106,37 @@ function hideInfo(e){
 
 
 
-function polygonOnEachFeature(feature, layer) {
-    layer.on({
-        mouseover: showInfo,
-        mouseout: hideInfo,
-    });
+function createPolygonInteractionHandlers() {
+    let activeLayer = null;
+
+    function clearActiveLayer() {
+        if (activeLayer === null) {
+            return;
+        }
+
+        hideInfo({target: activeLayer});
+        activeLayer = null;
+    }
+
+    return {
+        onEachFeature: function(feature, layer) {
+            layer.on({
+                mouseover: function(e) {
+                    if (activeLayer !== e.target) {
+                        clearActiveLayer();
+                    }
+                    activeLayer = e.target;
+                    showInfo(e);
+                },
+                mouseout: function(e) {
+                    if (activeLayer === e.target) {
+                        clearActiveLayer();
+                    }
+                }
+            });
+        },
+        clear: clearActiveLayer
+    };
 }
 
 
@@ -193,7 +219,12 @@ function updateMap(
     resetMapContainer(mapContainerID);
 
     let map = initMap("map", centerCoords, zoomLevel);
-    L.geoJson(polygonGeojson, {style: stylePolygonFeature, onEachFeature: polygonOnEachFeature}).addTo(map);
+    let polygonInteractions = createPolygonInteractionHandlers();
+    L.geoJson(polygonGeojson, {
+        style: stylePolygonFeature,
+        onEachFeature: polygonInteractions.onEachFeature
+    }).addTo(map);
+    map.getContainer().addEventListener("mouseleave", polygonInteractions.clear);
     L.geoJson(lineGeojson, {style: styleLine}).addTo(map);
     L.geoJson(pointGeojson, {pointToLayer: pointToLayer, onEachFeature: pointOnEachFeature}).addTo(map);
 
