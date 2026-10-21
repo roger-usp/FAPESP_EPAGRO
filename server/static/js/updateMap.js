@@ -44,6 +44,7 @@ function initMap(mapDivID, centerCoords, zoomLevel) {
 
 function stylePolygonFeature(feature) {
     return {
+        pane: "regionsPane",
         fillColor: feature.properties.color,
         weight: 1,
         opacity: 1,
@@ -56,12 +57,16 @@ function stylePolygonFeature(feature) {
 
 
 function styleLine(feature) {
-    return {color: feature.properties.color};
+    return {
+        pane: "arrowsPane",
+        color: feature.properties.color
+    };
 }
 
 
 function pointToLayer(feature, latlng) {
     return L.circleMarker(latlng, {
+        pane: "pointsPane",
         radius: 5,
         color: feature.properties.color,
         weight: 1,
@@ -108,6 +113,13 @@ function hideInfo(e){
 
 function createPolygonInteractionHandlers() {
     let activeLayer = null;
+    let polygonLayers = [];
+
+    function restorePolygonOrder() {
+        polygonLayers.forEach(function(layer) {
+            layer.bringToFront();
+        });
+    }
 
     function clearActiveLayer() {
         if (activeLayer === null) {
@@ -116,10 +128,12 @@ function createPolygonInteractionHandlers() {
 
         hideInfo({target: activeLayer});
         activeLayer = null;
+        restorePolygonOrder();
     }
 
     return {
         onEachFeature: function(feature, layer) {
+            polygonLayers.push(layer);
             layer.on({
                 mouseover: function(e) {
                     if (activeLayer !== e.target) {
@@ -219,6 +233,10 @@ function updateMap(
     resetMapContainer(mapContainerID);
 
     let map = initMap("map", centerCoords, zoomLevel);
+    map.createPane("regionsPane").style.zIndex = 410;
+    map.createPane("arrowsPane").style.zIndex = 420;
+    map.createPane("pointsPane").style.zIndex = 430;
+
     let polygonInteractions = createPolygonInteractionHandlers();
     L.geoJson(polygonGeojson, {
         style: stylePolygonFeature,
