@@ -4,5 +4,4 @@ pyogrio
 shapely
 pyproj
 geopandas
-sympy
 flask
