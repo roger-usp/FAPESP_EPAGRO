@@ -7,11 +7,12 @@
 
     <link rel="stylesheet" type="text/css" href= "{{ url_for('static',filename='css/general_style.css') }}">
 </head>
-<body style="background-color: #f4f4f4;">
+<body>
     <div id="navbar">
         <a href="{{url_for('home')}}">Home</a>
         <a href="{{url_for('data_sources')}}">Fonte Dados</a>
     </div>
+    <main class="sources-content">
     <h1>Fonte dos Dados</h1>
 
     <h2>Produção de arroz, café, cana-de-açúcar, laranja, soja</h2>
@@ -28,6 +29,7 @@
     <p>FERREIRA-LEITAO, V. et al. Biomass residues in brazil: availability and potential uses. Waste and Biomass Valorization, Springer, v. 1, p. 65–76, 2010.</p>
     <br>
     <p>Obs: Estimou-se a massa de frutas processadas pelas principais produtoras de suco de laranja do Brasil e, com a relação resíduo/fruta de FERREIRA-LEITAO, estimou-se a produção de resíduos</p>
+    </main>
 
 
 </body>

@@ -35,30 +35,29 @@
         <a href="{{url_for('data_sources')}}">Fonte Dados</a>
     </div>
 
-<div style="display: flex; height: 90vh; width: 95vw; justify-content: space-between;">
-    <div id="buttons" style="width: 25%; height: 100vh;">
-        <div id="base-select-container" style="width: 95%;">
+<div id="map-layout">
+    <div id="buttons">
+        <div id="base-select-container" class="control-group">
             <label for="base-select" id="base-select-label">Matéria-Prima:</label>
-            <select style="width: 95%;" name="base-select" id="base-select"></select>
+            <select name="base-select" id="base-select"></select>
         </div>
 
-        <div style="width: 20vw;">
+        <div class="control-group">
             <label for="point-select">Pontos:</label>
             <select name="point-select" id="point-select" multiple></select>
         </div>
 
-        <div style="width: 20vw;">
+        <div class="control-group">
             <label for="arrow-select">Setas:</label>
             <select name="arrow-select" id="arrow-select" multiple></select>
         </div>
 
         <button id="update-map-btn" onclick="updateBtnClick()">Atualizar Mapa</button>
-        <br>
-        <img src="{{url_for('static', filename='images/logo_fapesp.png')}}" style="height: 10%; margin:10px"/>
-        <p style="color: #05015c">Processo 2023/05420-0</p>
+        <img id="project-logo" src="{{url_for('static', filename='images/logo_fapesp.png')}}" alt="FAPESP">
+        <p id="process-number">Processo 2023/05420-0</p>
     </div>
 
-    <div id="map-container" style="height: 85vh; width: 70%;"></div>
+    <div id="map-container"></div>
 </div>
 
     <script>
