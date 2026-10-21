@@ -77,6 +77,7 @@ function pointOnEachFeature(feature, layer) {
 
 function showInfo(e) {
     let layer = e.target;
+    layer.bringToFront();
     layer.setStyle({dashArray: '0', color: "black", weight: 3})
 
     let properties = layer.feature.properties;
@@ -199,4 +200,3 @@ function updateMap(
     fillPointArrowLegend(lineGeojson, pointGeojson);
     makeColorbar("colorbar-div", colorbarTitle, 11, cmap);
 }
-
